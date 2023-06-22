@@ -25,9 +25,9 @@ app.get('/', (req : Request, res: Response) => {
   res.send('Hello World!')
 })
 
-//app.delete('/testing/all-data', (req: Request, res: Response) => {
-  //res.send(204)  
-//})
+app.delete('/testing/all-data', (req: Request, res: Response) => {
+  res.send(204)  
+})
 
 app.get('/videos', (req: Request, res: Response) => {
   res.send(videos)
