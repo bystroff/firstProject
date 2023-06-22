@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express'
-import { send } from 'process'
+
 export const app = express()
 const port = 3000
 
@@ -12,25 +12,27 @@ const HTTP_STATUSES = {
   NOT_FOUND_404: 404
 }
 
-let videos = [
-  {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: 18, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
-  {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: 1, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
-  {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: 15, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
-  {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: 5, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
-  {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: 6, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
-  {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: 8, createdAt: ' ', publicationDate: ' ', availableResolutions: []}
-]
+const jsonBodyMiddleware = express.json()
+app.use(jsonBodyMiddleware)
 
-app.get('/', (req : Request, res: Response) => {
-  res.send('Hello World!')
-})
+const db = {
+  videos : [
+    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: 18, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
+    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: 1, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
+    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: 15, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
+    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: 5, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
+    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: 6, createdAt: ' ', publicationDate: ' ', availableResolutions: []},
+    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: 8, createdAt: ' ', publicationDate: ' ', availableResolutions: []}
+  ]
+} 
 
-app.delete('/testing/all-data', async (req: Request, res: Response) => {
+app.delete('/testing/all-data', (req: Request, res: Response) => {
+  db.videos = [];
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
 app.get('/videos', (req: Request, res: Response) => {
-  res.send(videos)
+  res.send(db.videos)
 })
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -51,14 +53,14 @@ app.post('/videos', (req: Request, res: Response) => {
     title: title,
     author: ''
   }
-  videos.push()
+  db.videos.push()
 
   res.status(201).send(newVideo)
 })
 
 app.get('/videos/:videoId', (req: Request, res: Response) => {
   const id = +req.params.videoId
-  const video = videos.find(v => v.id === id)
+  const video = db.videos.find(v => v.id === id)
   if (video) {
     res.send(video)
   } else {
@@ -80,7 +82,7 @@ app.put('/videos/:videoId', (req: Request, res: Response) => {
   }
 
   const id = +req.params.videoId
-  const video = videos.find(v => v.id === id)
+  const video = db.videos.find(v => v.id === id)
   if (video) {
     video.title = title
     res.status(204).send(video)
@@ -91,9 +93,9 @@ app.put('/videos/:videoId', (req: Request, res: Response) => {
 
 app.delete('/videos/:videoId', (req: Request, res: Response) => {
   const id = +req.params.videoId;
-  const newVideos = videos.filter(v => v.id !== id)
-  if (newVideos.length < videos.length) {
-    videos = newVideos
+  const newVideos = db.videos.filter(v => v.id !== id)
+  if (newVideos.length < db.videos.length) {
+    db.videos = newVideos
     res.send(204)
   } else {
     res.send(404)
