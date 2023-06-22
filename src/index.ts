@@ -37,7 +37,9 @@ app.get('/videos', (req: Request, res: Response) => {
 
 app.post('/videos', (req: Request, res: Response) => {
   let title = req.body.title
-  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
+  let author = req.body.author
+  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40 
+       || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
     res.status(400).send({
       errorsMessages: [{
         message: 'Incorrect title',
@@ -70,7 +72,9 @@ app.get('/videos/:videoId', (req: Request, res: Response) => {
 
 app.put('/videos/:videoId', (req: Request, res: Response) => {
   let title = req.body.title
-  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
+  let author = req.body.author
+  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40
+  || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
     res.status(400).send({
       errorsMessages: [{
         message: 'Incorrect title',
