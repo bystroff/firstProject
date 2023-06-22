@@ -41,19 +41,23 @@ app.post('/videos', (req: Request, res: Response) => {
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40 
        || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
     res.status(400).send({
-      errorsMessages: [{
-        message: 'Incorrect title',
-        field: 'title'
-      }],
-      resultCode: 1
+      errorsMessages: [
+        { message: 'title is required', field: 'title'},
+        { message: 'author is required', field: 'author'},
+      ]
     })
     return
   }
 
   const newVideo = {
     id: +(new Date()),
-    title: title,
-    author: ''
+    title: 'String', 
+    author: 'String', 
+    canBeDownloaded: false, 
+    minAgeRestriction: 1, 
+    createdAt: 'String', 
+    publicationDate: 'String', 
+    availableResolutions: [ '' ]
   }
   db.videos.push()
 
