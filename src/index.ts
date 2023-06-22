@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express'
 import { send } from 'process'
-const app = express()
+export const app = express()
 const port = 3000
 
 const HTTP_STATUSES = {
@@ -25,8 +25,8 @@ app.get('/', (req : Request, res: Response) => {
   res.send('Hello World!')
 })
 
-app.delete('/testing/all-data', (req: Request, res: Response) => {
-  res.send(204)  
+app.delete('/testing/all-data', async (req: Request, res: Response) => {
+  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
 app.get('/videos', (req: Request, res: Response) => {
