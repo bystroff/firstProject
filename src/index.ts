@@ -53,8 +53,8 @@ app.post('/videos', (req: Request, res: Response) => {
     id: +(new Date()),
     title: req.body.title, 
     author: req.body.author, 
-    canBeDownloaded: false, 
-    minAgeRestriction: 1, 
+    canBeDownloaded: req.body.canBeDownloaded, 
+    minAgeRestriction: req.body.minAgeRestriction, 
     createdAt: (new Date()).toISOString(), 
     publicationDate: (new Date()).toISOString(), 
     availableResolutions: [ 'P144' ]
