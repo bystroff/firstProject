@@ -3,6 +3,7 @@ import {app} from '../src'
 import {describe, beforeAll, it, expect} from '@jest/globals'
 
 describe('/videos', () => {
+   // let newVideo[];
     beforeAll(async () => {
         await request(app).delete('/testing/all-data')
     })
