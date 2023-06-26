@@ -38,6 +38,11 @@ describe('/videos', () => {
         await request(app).get('/videos/helloWorld').expect(400)
     })
 
+    it('+ GET product by ID with correct id', async () => {
+        await request(app)
+            .get('/videos/' + newVideo!.id).expect(200, newVideo)
+    })
+
 
     
 })

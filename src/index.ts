@@ -17,12 +17,12 @@ app.use(jsonBodyMiddleware)
 
 const db = {
   videos : [
-    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: 18, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: 1, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: 15, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: 5, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: 6, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: 8, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']}
+    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']}
   ]
 } 
 
@@ -40,7 +40,7 @@ app.post('/videos', (req: Request, res: Response) => {
   let author = req.body.author
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40 
        || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-    res.status(400).send({
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
       errorsMessages: [
         { message: 'title is required', field: 'title'},
         { message: 'author is required', field: 'author'},
@@ -53,14 +53,14 @@ app.post('/videos', (req: Request, res: Response) => {
     id: +(new Date()),
     title: req.body.title, 
     author: req.body.author, 
-    canBeDownloaded: req.body.canBeDownloaded, 
-    minAgeRestriction: req.body.minAgeRestriction, 
+    canBeDownloaded: true, 
+    minAgeRestriction: null, 
     createdAt: (new Date()).toISOString(), 
     publicationDate: (new Date()).toISOString(), 
     availableResolutions: [ 'P144' ]
   }
-  db.videos.push(newVideo)
 
+  db.videos.push(newVideo)
   res.status(HTTP_STATUSES.CREATED_201).send(newVideo)
 })
 
@@ -79,12 +79,11 @@ app.put('/videos/:videoId', (req: Request, res: Response) => {
   let author = req.body.author
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40
   || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-    res.status(400).send({
-      errorsMessages: [{
-        message: 'Incorrect title',
-        field: 'title'
-      }],
-      resultCode: 1
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
+      errorsMessages: [
+        { message: 'title is required', field: 'title'},
+        { message: 'author is required', field: 'author'},
+      ]
     })
     return
   }
