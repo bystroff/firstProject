@@ -51,13 +51,13 @@ app.post('/videos', (req: Request, res: Response) => {
 
   let newVideo = {
     id: +(new Date()),
-    title: 'String', 
-    author: 'String', 
+    title: req.body.title, 
+    author: req.body.author, 
     canBeDownloaded: false, 
     minAgeRestriction: 1, 
-    createdAt: 'String', 
-    publicationDate: 'String', 
-    availableResolutions: [ '' ]
+    createdAt: (new Date()).toISOString(), 
+    publicationDate: (new Date()).toISOString(), 
+    availableResolutions: [ 'P144' ]
   }
   db.videos.push(newVideo)
 
