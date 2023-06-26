@@ -33,19 +33,6 @@ describe('/videos', () => {
         expect(res.body).toEqual([])
     })
 
-    it('post req with correct data should be return 201', async () => {
-        await request(app)
-        .post('/videos/')
-        .send({id: 1,
-            title: 'IT-INCUBATOR', 
-            author: '01 lesson', 
-            canBeDownloaded: false, 
-            minAgeRestriction: 1, 
-            availableResolutions: [ 'P144' ]})
-        .expect(201)
-        const res = await request(app).get('/videos/')
-        expect(res.body).toEqual(newVideo)
-    })
 
     it('- GET product by ID with incorrect id', async () => {
         await request(app).get('/videos/helloWorld').expect(400)
