@@ -17,12 +17,12 @@ app.use(jsonBodyMiddleware)
 
 const db = {
   videos : [
-    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: 18, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']},
-    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: 1, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']},
-    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: 15, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']},
-    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: 5, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']},
-    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: 6, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']},
-    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: 8, createdAt: ' ', publicationDate: ' ', availableResolutions: ['']}
+    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: 18, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: 1, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: 15, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: 5, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: 6, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
+    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: 8, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']}
   ]
 } 
 
@@ -49,7 +49,7 @@ app.post('/videos', (req: Request, res: Response) => {
     return
   }
 
-  const newVideo = {
+  let newVideo = {
     id: +(new Date()),
     title: 'String', 
     author: 'String', 
