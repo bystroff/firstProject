@@ -3,7 +3,16 @@ import {app} from '../src'
 import {describe, beforeAll, it, expect} from '@jest/globals'
 
 describe('/videos', () => {
-   // let newVideo[];
+   let newVideo = {
+    id: +(new Date()),
+    title: 'String', 
+    author: 'String', 
+    canBeDownloaded: false, 
+    minAgeRestriction: 1, 
+    createdAt: 'String', 
+    publicationDate: 'String', 
+    availableResolutions: [ '' ]
+  }
     beforeAll(async () => {
         await request(app).delete('/testing/all-data')
     })
@@ -25,6 +34,11 @@ describe('/videos', () => {
         const res = await request(app).get('/videos/')
         expect(res.body).toEqual([])
     })
+
+    it('- GET product by ID with incorrect id', async () => {
+        await request(app).get('/videos/helloWorld').expect(400)
+    })
+
 
     
 })
