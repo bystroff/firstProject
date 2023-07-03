@@ -44,21 +44,24 @@ app.post('/videos', (req: Request, res: Response) => {
   const availableResolutions = req.body.availableResolutions
 
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
-    errorsMessages.push(
-      { 'message': 'title is required', 
-      'field': 'title'})
+    errorsMessages.push({
+      'message': 'title is required', 
+      'field': 'title'
+    })
   }
 
   if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-    errorsMessages.push(
-      { 'message': 'author is required', 
-      'field': 'author'})
+    errorsMessages.push({
+      'message': 'author is required', 
+      'field': 'author'
+    })
   }
 
   if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
-    errorsMessages.push(
-      {'message': 'AvailableResolutions is incorrect',
-      'field': 'availableResolutions'})
+    errorsMessages.push({
+      'message': 'AvailableResolutions is incorrect',
+      'field': 'availableResolutions'
+    })
   }
 
   if (errorsMessages.length !== 0) {
@@ -93,32 +96,76 @@ app.get('/:videoId', (req: Request, res: Response) => {
 })
 
 app.put('/:videoId', (req: Request, res: Response) => {
-  let title = req.body.title
-  let author = req.body.author
-  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40
-  || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-      errorsMessages: [
-        { message: 'title is required', field: 'title'},
-        { message: 'author is required', field: 'author'},
-      ]
+  const errorsMessages: Object[] = []
+  const title = req.body.title
+  const author = req.body.author
+  const availableResolutions = req.body.availableResolutions
+  const canBeDownloaded = req.body.canBeDownloaded
+  const minAgeRestriction = req.body.minAgeRestriction
+  const publicationDate = req.body.publicationDate
+
+  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
+    errorsMessages.push({
+      'message': 'title is required', 
+      'field': 'title'
     })
-    return
   }
 
-  const id = +req.params.videoId
-  const video = db.videos.find(v => v.id === id)
-  if (video) {
-    video.title = title
-    res.status(204).send(video)
+  if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
+    errorsMessages.push({ 
+      'message': 'author is required', 
+      'field': 'author'
+    })
+  }
+
+  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
+    errorsMessages.push({
+      'message': 'AvailableResolutions is incorrect',
+      'field': 'availableResolutions'
+    })
+  }
+
+  if (!canBeDownloaded || typeof canBeDownloaded !== 'boolean') {
+    errorsMessages.push({
+      'message': 'CanBeDownloaded is incorrect',
+      'field': 'canBeDownloaded'
+    })
+  }
+
+  if (!minAgeRestriction || typeof minAgeRestriction !== 'number' || minAgeRestriction < 1 || minAgeRestriction > 18) {
+    errorsMessages.push({
+      'message': 'MinAgeRestriction is incorrect',
+      'field': 'minAgeRestriction'
+    })
+  }
+
+  if (!publicationDate || typeof publicationDate !== 'string' || !publicationDate.trim()) {
+    errorsMessages.push({
+      'message': 'PublicationDate is incorrect',
+      'field': 'publicationDate'
+    })
+  }
+
+  if (errorsMessages.length > 0) {
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400).send({errorsMessages: errorsMessages})
   } else {
-    res.send(404)
+    let video = db.videos.find(v => v.id !== +req.params.videoId)
+    if (video) {
+      video.title = title
+      video.author = author
+      video.availableResolutions = availableResolutions
+      video.canBeDownloaded = canBeDownloaded
+      video.minAgeRestriction = minAgeRestriction
+      video.publicationDate = publicationDate
+      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    } else (
+      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    )
   }
 })
 
-app.delete('/videos/:videoId', (req: Request, res: Response) => {
-  const id = +req.params.videoId;
-  const newVideos = db.videos.filter(v => v.id !== id)
+app.delete('/:videoId', (req: Request, res: Response) => {
+  const newVideos = db.videos.filter(v => v.id !== +req.params.id)
   if (newVideos.length < db.videos.length) {
     db.videos = newVideos
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
