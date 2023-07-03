@@ -19,12 +19,22 @@ enum Resolutions {P144 = "P144", P240 = "P240", P360 = "P360", P480 = "P480", P7
 
 const db = {
   videos : [
-    {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 2, title: 'УУУУУУ', author: 'Майкл Наки', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 3, title: 'Вечерний выпуск', author: 'Дождь', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 4, title: 'Путь самурая', author: 'IT-KAMASUTRA', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 5, title: 'Реальное собеседование Front-end', author: 'Ulbi TV', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
-    {id: 6, title: 'Урок 1 - Типы данных и их модификаторы', author: 'CSTDIO', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']}
+    {id: 4, 
+    title: 'Путь самурая', 
+    author: 'IT-KAMASUTRA', 
+    canBeDownloaded: false, 
+    minAgeRestriction: null, 
+    createdAt: '2023-07-06T19:06:28.605Z', 
+    publicationDate: '2023-07-06T19:06:28.605Z', 
+    availableResolutions: ['P720']},
+    {id: 5, 
+    title: 'Реальное собеседование Front-end', 
+    author: 'Ulbi TV', 
+    canBeDownloaded: false, 
+    minAgeRestriction: null, 
+    createdAt: '2023-07-06T19:06:28.605Z', 
+    publicationDate: '2023-07-06T19:06:28.605Z', 
+    availableResolutions: ['P720']}
   ]
 } 
 
@@ -57,7 +67,7 @@ app.post('/videos', (req: Request, res: Response) => {
     })
   }
 
-  if (!availableResolutions || !availableResolutions.every(v => Object.keys(Resolutions).includes(v))) {
+  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push({
       'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'
@@ -118,7 +128,7 @@ app.put('/:videoId', (req: Request, res: Response) => {
     })
   }
 
-  if (!availableResolutions || !availableResolutions.every(v => Object.keys(Resolutions).includes(v))) {
+  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push({
       'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'
