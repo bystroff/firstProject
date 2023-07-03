@@ -55,8 +55,8 @@ app.post('/videos', (req: Request, res: Response) => {
     author: req.body.author, 
     canBeDownloaded: true, 
     minAgeRestriction: null, 
-    createdAt: (new Date()).toISOString(), 
-    publicationDate: (new Date()).toISOString(), 
+    createdAt: new Date().toISOString(), 
+    publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), 
     availableResolutions: [ 'P144' ]
   }
 
@@ -69,7 +69,7 @@ app.get('/videos/:videoId', (req: Request, res: Response) => {
   if (video) {
     res.status(HTTP_STATUSES.OK_200).send(video)
   } else {
-    res.send(HTTP_STATUSES.BAD_REQUEST_400)
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
   }
 })
 
@@ -102,9 +102,9 @@ app.delete('/videos/:videoId', (req: Request, res: Response) => {
   const newVideos = db.videos.filter(v => v.id !== id)
   if (newVideos.length < db.videos.length) {
     db.videos = newVideos
-    res.send(204)
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
   } else {
-    res.send(404)
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
   }
 })
 
