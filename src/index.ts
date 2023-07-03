@@ -62,7 +62,7 @@ app.post('/videos', (req: Request, res: Response) => {
   }
 
   if (errorsMessages.length !== 0) {
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({errorsMessages: errorsMessages})
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400).send({errorsMessages: errorsMessages})
   } else {
     const createdAt = new Date()
     let publicationDate = new Date()
@@ -79,14 +79,14 @@ app.post('/videos', (req: Request, res: Response) => {
     }
 
     db.videos.push(newVideo)
-    res.status(HTTP_STATUSES.CREATED_201).send(newVideo)
+    res.sendStatus(HTTP_STATUSES.CREATED_201).send(newVideo)
   }  
 })
 
 app.get('/videos/:videoId', (req: Request, res: Response) => {
-  const video = db.videos.find(v => v.id === +req.params.id)
+  const video = db.videos.find(v => v.id === +req.params.videoId)
   if (video) {
-    res.status(HTTP_STATUSES.OK_200).send(video)
+    res.sendStatus(HTTP_STATUSES.OK_200).send(video)
   } else {
     res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
   }
