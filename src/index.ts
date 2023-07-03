@@ -65,8 +65,7 @@ app.post('/videos', (req: Request, res: Response) => {
 })
 
 app.get('/videos/:videoId', (req: Request, res: Response) => {
-  const id = +req.params.videoId
-  const video = db.videos.find(v => v.id === id)
+  const video = db.videos.find(v => v.id === +req.params.id)
   if (video) {
     res.status(HTTP_STATUSES.OK_200).send(video)
   } else {
