@@ -15,6 +15,8 @@ const HTTP_STATUSES = {
 const jsonBodyMiddleware = express.json()
 app.use(jsonBodyMiddleware)
 
+enum Resolutions {P144 = "P144", P240 = "P240", P360 = "P360", P480 = "P480", P720 = "P720", P1080 = "P1080", P1440 = "P1440", P2160 = "P2160"}
+
 const db = {
   videos : [
     {id: 1, title: 'Баста', author: 'Вдудь', canBeDownloaded: false, minAgeRestriction: null, createdAt: ' ', publicationDate: ' ', availableResolutions: ['P720']},
@@ -36,32 +38,49 @@ app.get('/videos', (req: Request, res: Response) => {
 })
 
 app.post('/videos', (req: Request, res: Response) => {
-  let title = req.body.title
-  let author = req.body.author
-  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40 
-       || !author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-      errorsMessages: [
-        { message: 'title is required', field: 'title'},
-        { message: 'author is required', field: 'author'},
-      ]
-    })
-    return
+  const errorsMessages: Object[] = []
+  const title = req.body.title
+  const author = req.body.author
+  const availableResolutions = req.body.availableResolutions
+
+  if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
+    errorsMessages.push(
+      { 'message': 'title is required', 
+      'field': 'title'})
   }
 
-  let newVideo = {
-    id: +(new Date()),
-    title: req.body.title, 
-    author: req.body.author, 
-    canBeDownloaded: true, 
-    minAgeRestriction: null, 
-    createdAt: new Date().toISOString(), 
-    publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), 
-    availableResolutions: [ 'P144' ]
+  if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
+    errorsMessages.push(
+      { 'message': 'author is required', 
+      'field': 'author'})
   }
 
-  db.videos.push(newVideo)
-  res.status(HTTP_STATUSES.CREATED_201).send(newVideo)
+  if (availableResolutions && !availableResolutions.every((r: string) => Object.keys(Resolutions).includes(r))) {
+    errorsMessages.push(
+      {'message': 'AvailableResolutions is incorrect',
+      'field': 'availableResolutions'})
+  }
+
+  if (errorsMessages.length !== 0) {
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({errorsMessages: errorsMessages})
+  } else {
+    const createdAt = new Date()
+    let publicationDate = new Date()
+    publicationDate.setDate(publicationDate.getDate() + 1)
+    const newVideo = {
+      id: +(new Date()),
+      title, 
+      author,
+      availableResolutions, 
+      canBeDownloaded: false, 
+      minAgeRestriction: null, 
+      createdAt: createdAt.toISOString(), 
+      publicationDate: publicationDate.toISOString()
+    }
+
+    db.videos.push(newVideo)
+    res.status(HTTP_STATUSES.CREATED_201).send(newVideo)
+  }  
 })
 
 app.get('/videos/:videoId', (req: Request, res: Response) => {
