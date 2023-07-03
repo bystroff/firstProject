@@ -55,7 +55,7 @@ app.post('/videos', (req: Request, res: Response) => {
       'field': 'author'})
   }
 
-  if (availableResolutions && !availableResolutions.every(v => Object.keys(Resolutions).includes(v))) {
+  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push(
       {'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'})
@@ -92,7 +92,7 @@ app.get('/:videoId', (req: Request, res: Response) => {
   }
 })
 
-app.put('/videos/:videoId', (req: Request, res: Response) => {
+app.put('/:videoId', (req: Request, res: Response) => {
   let title = req.body.title
   let author = req.body.author
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40
