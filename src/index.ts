@@ -55,7 +55,7 @@ app.post('/videos', (req: Request, res: Response) => {
       'field': 'author'})
   }
 
-  if (availableResolutions && !availableResolutions.every((r: string) => Object.keys(Resolutions).includes(r))) {
+  if (availableResolutions && !availableResolutions.every(v => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push(
       {'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'})
