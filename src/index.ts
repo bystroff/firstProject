@@ -19,7 +19,7 @@ enum Resolutions {P144 = "P144", P240 = "P240", P360 = "P360", P480 = "P480", P7
 
 const db = {
   videos : [
-    {id: 4, 
+    {id: 1, 
     title: 'Путь самурая', 
     author: 'IT-KAMASUTRA', 
     canBeDownloaded: false, 
@@ -27,14 +27,14 @@ const db = {
     createdAt: '2023-07-06T19:06:28.605Z', 
     publicationDate: '2023-07-06T19:06:28.605Z', 
     availableResolutions: ['P720']},
-    {id: 5, 
+    {id: 2, 
     title: 'Реальное собеседование Front-end', 
     author: 'Ulbi TV', 
     canBeDownloaded: false, 
     minAgeRestriction: null, 
     createdAt: '2023-07-06T19:06:28.605Z', 
     publicationDate: '2023-07-06T19:06:28.605Z', 
-    availableResolutions: ['P720']}
+    availableResolutions: ['P240']}
   ]
 } 
 
@@ -55,14 +55,14 @@ app.post('/videos', (req: Request, res: Response) => {
 
   if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
     errorsMessages.push({
-      'message': 'title is required', 
+      'message': 'title is incorrect', 
       'field': 'title'
     })
   }
 
   if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
     errorsMessages.push({
-      'message': 'author is required', 
+      'message': 'author is incorrect', 
       'field': 'author'
     })
   }
@@ -175,7 +175,7 @@ app.put('/:videoId', (req: Request, res: Response) => {
 })
 
 app.delete('/:videoId', (req: Request, res: Response) => {
-  const newVideos = db.videos.filter(v => v.id !== +req.params.id)
+  const newVideos = db.videos.filter(v => v.id !== +req.params.videoId)
   if (newVideos.length < db.videos.length) {
     db.videos = newVideos
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
