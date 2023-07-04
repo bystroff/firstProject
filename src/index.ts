@@ -67,7 +67,7 @@ app.post('/videos', (req: Request, res: Response) => {
     })
   }
 
-  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
+  if (availableResolutions && !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push({
       'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'
@@ -128,14 +128,14 @@ app.put('/:videoId', (req: Request, res: Response) => {
     })
   }
 
-  if (!availableResolutions || !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
+  if (availableResolutions && !availableResolutions.every((v: string) => Object.keys(Resolutions).includes(v))) {
     errorsMessages.push({
       'message': 'AvailableResolutions is incorrect',
       'field': 'availableResolutions'
     })
   }
 
-  if (!canBeDownloaded || typeof canBeDownloaded !== 'boolean') {
+  if (typeof canBeDownloaded !== undefined && typeof canBeDownloaded !== 'boolean') {
     errorsMessages.push({
       'message': 'CanBeDownloaded is incorrect',
       'field': 'canBeDownloaded'
